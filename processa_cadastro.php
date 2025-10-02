@@ -3,7 +3,7 @@ require_once 'conexao.php';
 $PERFIS_PERMITIDOS = ['administrador']; // apenas admin
 require_once 'verifica_sessao.php';
 
-// ⛔️ Função redir (usada só para ERROS)
+// ⛔️ Função redir (usada só para ERROS ou mensagens)
 function redir($ok, $msg) {
     session_start();
     if ($ok) {
@@ -23,7 +23,7 @@ $senha      = $_POST['senha'] ?? '';
 $senha2     = $_POST['senha2'] ?? '';
 $matricula  = null;
 $email      = null;
-$data_nascimento = null;
+$data_nascimento = null; // só será usado para alunos
 
 // 🔍 Validação inicial
 if (!$tipo || !$nome || !$cpf || !$senha || !$senha2) {
@@ -39,33 +39,38 @@ if (!in_array($tipo, $tiposValidos, true)) {
     redir(false, 'Tipo de usuário inválido.');
 }
 
-// 📌 Campos adicionais
-$nome_pai = trim($_POST['nome_pai'] ?? '') ?: null;
-$nome_mae = trim($_POST['nome_mae'] ?? '') ?: null;
+// 📌 Campos adicionais opcionais (pai/mãe apenas para aluno)
+$nome_pai = null;
+$nome_mae = null;
 
+// 🎓 Coleta de campos específicos por tipo
 if ($tipo === 'aluno') {
     $email           = trim($_POST['email_aluno'] ?? '');
     $matricula       = trim($_POST['matricula_aluno'] ?? '');
     $data_nascimento = $_POST['data_nascimento'] ?? null;
+    $nome_pai        = trim($_POST['nome_pai'] ?? '') ?: null;
+    $nome_mae        = trim($_POST['nome_mae'] ?? '') ?: null;
+
 } elseif ($tipo === 'professor') {
     $email           = trim($_POST['email_prof'] ?? '');
     $matricula       = trim($_POST['matricula_prof'] ?? '');
-    $data_nascimento = $_POST['data_nascimento'] ?? null;
+    // Professores não têm data de nascimento no sistema
+
 } elseif ($tipo === 'administrador') {
-    $email           = trim($_POST['email_prof'] ?? ''); // Reaproveitado, ou você pode criar um campo específico
+    $email           = trim($_POST['email_admin'] ?? '');
     $matricula       = trim($_POST['matricula_admin'] ?? '');
-    $data_nascimento = $_POST['data_nascimento'] ?? null;
+    // Administradores também não têm data de nascimento no sistema
 }
 
-// ❌ Campos obrigatórios
+// ❌ Validação obrigatória de campos comuns
 if (!$email) {
     redir(false, 'O campo E-mail é obrigatório.');
 }
 if (!$matricula) {
     redir(false, 'O campo Matrícula é obrigatório.');
 }
-if (!$data_nascimento) {
-    redir(false, 'O campo Data de Nascimento é obrigatório.');
+if ($tipo === 'aluno' && !$data_nascimento) {
+    redir(false, 'O campo Data de Nascimento é obrigatório para alunos.');
 }
 
 // ✅ Validações de unicidade e inserção
@@ -109,11 +114,11 @@ try {
         ':email'           => $email,
         ':nome_pai'        => $nome_pai,
         ':nome_mae'        => $nome_mae,
-        ':data_nascimento' => $data_nascimento,
+        ':data_nascimento' => $tipo === 'aluno' ? $data_nascimento : null,
         ':senha_hash'      => $senhaHash
     ]);
 
-    // ✅ Redireciona para página de sucesso (sem parâmetros na URL)
+    // ✅ Redireciona para página de sucesso
     header('Location: cadastro_sucesso.php');
     exit;
 
