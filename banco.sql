@@ -16,7 +16,7 @@ CREATE TABLE usuarios (
   email           VARCHAR(150) NOT NULL,
   nome_pai        VARCHAR(150) NULL,
   nome_mae        VARCHAR(150) NULL,
-  data_nascimento DATE         NOT NULL,
+  data_nascimento DATE         NULL,
   senha_hash      VARCHAR(255) NOT NULL,
   created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE KEY uq_cpf (cpf),
