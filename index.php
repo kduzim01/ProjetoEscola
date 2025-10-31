@@ -8,12 +8,6 @@ $msg  = $_SESSION['msg_login']  ?? null;
 // Limpa as mensagens para não reaparecerem após o refresh
 unset($_SESSION['erro_login'], $_SESSION['msg_login']);
 
-// NÃO redireciona automaticamente para o dashboard
-// Isso foi removido conforme solicitado para forçar login manual
-// if (isset($_SESSION['usuario_id'])) {
-//     header('Location: dashboard.php');
-//     exit;
-// }
 
 // Lê cookie de matrícula para preencher o input
 $matricula_cookie = $_COOKIE['matricula'] ?? '';
@@ -23,7 +17,7 @@ $matricula_cookie = $_COOKIE['matricula'] ?? '';
 <head>
   <meta charset="utf-8">
   <title>Login - Sistema Escolar</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 <div class="container">
@@ -43,7 +37,7 @@ $matricula_cookie = $_COOKIE['matricula'] ?? '';
       <div class="alert ok"><?= htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') ?></div>
     <?php endif; ?>
 
-    <form method="post" action="autentica.php" autocomplete="off" id="formLogin">
+    <form method="post" action="public/autentica.php" autocomplete="off" id="formLogin">
       <div class="field">
         <label for="matricula">Matrícula</label>
         <input
@@ -74,14 +68,14 @@ $matricula_cookie = $_COOKIE['matricula'] ?? '';
     </form>
 
     <div class="forget">
-      <a href="esqueci_senha.php">Esqueceu sua senha?</a>
+      <a href="public/esqueci_senha.php">Esqueceu sua senha?</a>
     </div>
   </div>
 
   <div class="footer center">© <?= date('Y'); ?> Sistema Escolar</div>
 </div>
 
-<script src="index_script.js"></script>
+<script src="assets/js/index_script.js"></script>
 
 </body>
 </html>
