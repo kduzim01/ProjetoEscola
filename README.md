@@ -217,31 +217,6 @@ Faça login com as credenciais de teste.
 
 ### 🔑 Rotas da API
 
-**POST /api/index.php?rota=login**
-
-Autentica o usuário.
-
-Entrada:
-```json
-{
-  "matricula": "231-000655",
-  "senha": "123456@abcdef"
-}
-```
-
-Saída:
-```json
-{
-  "status": 200,
-  "msg": "Login OK",
-  "data": {
-    "id": 1,
-    "nome": "Admin",
-    "tipo": "Admin"
-  }
-}
-```
-
 **GET /api/index.php?rota=alunos** – Lista alunos.
 
 **GET /api/index.php?rota=alunos/{id}** – Retorna dados do aluno + notas.
