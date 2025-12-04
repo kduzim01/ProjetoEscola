@@ -42,3 +42,31 @@ CREATE TABLE tokens_login (
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
   UNIQUE KEY uq_token (token)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE notas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    aluno_id INT NOT NULL,
+    nota FLOAT NOT NULL,
+    situacao ENUM('Aprovado', 'Reprovado') NOT NULL,
+    data_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (aluno_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+
+
+CREATE OR REPLACE VIEW vw_alunos_status AS
+SELECT 
+    u.id AS aluno_id,
+    u.nome AS nome,
+    u.matricula AS matricula,
+    u.email AS email,
+    AVG(n.nota) AS media,
+    CASE 
+        WHEN AVG(n.nota) >= 6 THEN 'APROVADO'
+        ELSE 'REPROVADO'
+    END AS status
+FROM usuarios u
+LEFT JOIN notas n ON n.aluno_id = u.id
+WHERE u.tipo = 'aluno'
+GROUP BY u.id, u.nome, u.matricula, u.email;
