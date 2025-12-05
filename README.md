@@ -280,24 +280,6 @@ Faça login com as credenciais de teste.
 
 ---
 
-## 💡 Boas Práticas Extras
-
-* Mantenha `banco.sql` atualizado.
-* Adicione `.gitignore` para excluir arquivos sensíveis.
-* Crie backups periódicos do banco.
-* Documente novas funções diretamente no README ou Wiki do projeto.
-
----
-
-## 🤝 Como Contribuir
-
-1. Faça um fork do projeto.
-2. Crie uma nova branch: `git checkout -b feature/nova-funcionalidade`.
-3. Realize commits descritivos.
-4. Envie um Pull Request com resumo das alterações.
-
----
-
 ## 📜 Licença
 
 Projeto aberto para uso acadêmico e aprendizado.
